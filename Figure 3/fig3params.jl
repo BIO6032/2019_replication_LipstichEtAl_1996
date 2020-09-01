@@ -14,7 +14,8 @@ r1 = rand(Float64, n_parasites);
 Random.seed!(1236);
 r2 = rand(Float64, n_parasites);
 Random.seed!(1237);
-r3 = rand()*r1
+vec = fill(0.0, n_parasites)
+r3 = [rand(vec[i]:0.00001:r1[i]) for i in 1:n_parasites] #get random value between 0 and r1
 bx = 1.0;
 by = bx .* r3 .* (1 .- r1 .* r2);
 V0 = (by .* ux) ./ (bx .* uy);

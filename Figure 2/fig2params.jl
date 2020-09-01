@@ -13,7 +13,7 @@ r1 = rand(Float64, n_parasites)
 Random.seed!(1236);
 r2 = rand(Float64, n_parasites)
 Random.seed!(1237);
-r3 = rand(0.0:1000, n_parasites)/1000
+r3 = rand(Float64, n_parasites)
 bx = 1.0;
 by = bx .* r1 .* (1 .- r1 .* r2);
 # V0 = by*ux./(bx*ui_avg)
