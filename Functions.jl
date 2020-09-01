@@ -3,8 +3,8 @@ function fonction(u, p, t)
     x = u[1]
     y = u[2:end]
     regul = (1-(sum(u))/(p.K))
-    dx = (p.bx*x + sum(p.ey.*y))*regul - p.ux*x-p.c*sum(p.βy.*y)*x
-    dy = p.by .* y .* regul .- p.uy .* y .+ p.c .* p.βy .* x .* y
+    dx = (p.bx*x + sum(p.ei.*y))*regul - p.ux*x-p.c*sum(p.βy.*y)*x
+    dy = p.by .* y .* regul .- p.ui .* y .+ p.c .* p.βy .* x .* y
     return vcat(dx, dy)
 end
 

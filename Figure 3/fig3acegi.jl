@@ -1,11 +1,12 @@
-include("fig3params.jl")
-c = 0.5
+include("fig4params.jl")
+c = 0.5;
 
 include("../Functions.jl")
 run_simulation()
 
 
-########## Figure 3a ##########
+
+####### Figure 4a ########
 Np = N';
 
 lbls = ["" for i = 1:1:n_parasites];
@@ -13,16 +14,16 @@ lbls2 = vcat("Infected", lbls);
 lbls2 = hcat(lbls2...);
 
 plot(Np[:,2:end], c=:blue, lw=0.4, alpha=0.4, title = "Number of infected and uninfected hosts",
-    xlabel = "Time", ylabel = "Number of individuals", label = lbls2, ylims=(0,70))
+    xlabel = "Time", ylabel = "Number of individuals", label = lbls2, ylims = (0,70))
 plot!(Np[:,1], c=:black, lw=0.4, label = "Uninfected")
 # plot!(sum(Np[:,2:end]; dims=2), label = "Total # parasites")
 
-# png("Figure 3/graph_3a.png")
+# png("Figure 4/graph_4a.png")
 
 
-######### Figure 3e ##########
+########## Figure 4c ###########
 
-#strains that survive at each time step for uy
+#uy of the survival strains
 survival = (Np.>0.0)[:,2:end];
 survived_ui = survival.*uy';
 avg_survived = sum(survived_ui; dims=2)./sum(survival; dims=2);
@@ -32,23 +33,16 @@ uy_avg = avg_w_survived;
 #strains that survive for βy
 survived_βy = survival.*βy';
 avg_survived_βy = sum(survived_βy; dims=2)./sum(survival; dims=2);
+#mean β
 βi_avg = avg_survived_βy;
-
 #weighted β
 avg_w_survived_βy = sum(Np[:,2:end].*βy'; dims=2)./sum(Np[:,2:end]; dims=2);
 βy_avg = avg_w_survived_βy;
 
 survived_by = survival.*by';
-avg_by_survived = sum(survived_by; dims=2)./sum(survival; dims=2);;
-avg_w_by = sum(Np[:,2:end].*by'; dims=2)./sum(Np[:,2:end]; dims=2)
+avg_by_survived = sum(survived_by; dims=2)./sum(survival; dims=2);
+avg_w_by = sum(Np[:,2:end].*by'; dims=2)./sum(Np[:,2:end]; dims=2);
 by_avg = avg_w_by;
-
-V0= by_avg.*ux./(bx*uy_avg);
-plot(V0,c=:black, title = "Vertical cases", xlabel = "Time", ylabel = "Mean V0", leg = false, ylims = (0.0,1.0))
-# png("Figure 3/graph_3e")
-
-
-########## Figure 3c ############
 
 #calculating R0
 k=1;
@@ -65,12 +59,20 @@ R0_w = H0_w + V0_w;
 # plot(R0, title = "Average R0 in the population", xlabel = "Time", ylabel = "Mean R0", leg = false)
 plot(R0_w,c=:black, title = "Average R0 in the population", xlabel = "Time", ylabel = "Mean R0", leg = false, ylims=(0,7))
 
-# png("Figure 3/graph_3c")
+# png("Figure 4/graph_4c")
 
 
 
-######### Figure 3g ###########
+######### Figure 4e #########
 
+V0= by_avg  .*ux./(bx*uy_avg);
+plot(V0,c=:black, title = "Vertical cases", xlabel = "Time", ylabel = "Mean V0", leg = false, ylims = (0.0,1.0))
+
+# png("Figure 4/graph_4e.png")
+
+
+
+###### Figure 4g #########
 #mean virulence
 Vir = (1 .- (by .+ ey).*ux./(bx.*uy));
 
@@ -87,11 +89,12 @@ Vir_avg_w = avg_w_survived_Vir;
 plot(βi_avg,c=:black, title = "Virulence and beta", label = "Beta", xlabel = "Time", ylabel = "Mean virulence & \n Mean Beta", ylims = (0,1))
 plot!(Vir_avg_w,c=:blue, label = "Virulence")
 
-# png("Figure 3/graph_3g.png")
+# png("Figure 4/graph_4g.png")
 
 
-########## Figure 3i ##########
+########### Figure 4i #########
 
+#calculating evenness
 function pielou(n)
     np = filter(x -> x > eps(), n)
     p = np./sum(np)
@@ -101,4 +104,4 @@ end
 ev = mapslices(pielou, Np[:,2:end]; dims=2);
 plot(ev,c=:black, title = "Evenness", xlabel = "Time", ylabel = "Relative abundance (log)", leg = false,ylims = (0,1))
 
-# png("Figure 3/graph_3i.png")
+# png("Figure 4/graph_4i.png")
